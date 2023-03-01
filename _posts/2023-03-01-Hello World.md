@@ -21,4 +21,4 @@ message = "Hello World!"
 print(message)
 ```
 
-#### This is a sneaky add for testing purposes
+#### This is a quick add for testing 
