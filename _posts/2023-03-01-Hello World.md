@@ -20,5 +20,3 @@ This is the first post on this site and it will be the place where I share my jo
 message = "Hello World!"
 print(message)
 ```
-
-#### This is a quick add for testing 
