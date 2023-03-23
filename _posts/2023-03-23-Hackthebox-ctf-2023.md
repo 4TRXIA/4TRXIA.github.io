@@ -24,3 +24,21 @@ This was a fun little flag to be had after joining the Hack the Box discord. It 
 ``` text
 HTB{l3t_th3_tr3asur3_hunt1ng_b3g1n!}
 ```
+
+## trapped source (web)
+--------------------
+
+![trapped-source-1](https://raw.githubusercontent.com/4TRXIA/HTB-CA-CTF-2023-Writeup-Images/main/trapped_source_site.png)
+
+This was a pretty straightforward and hese were the steps I took for this challenge:
+
+- Viewed the page source (Ctrl + U or Right-Click + View Page Source)
+- Scanned the page for any mention of the HTB flag format HTB{...}
+- No flag text present, so I checked for any scripts available
+- Found a script named "correctPin" and tried the code "8291"
+- Got the flag! 
+
+
+``` text
+HTB{V13w_50urc3_c4n_b3_u53ful!!!}
+```
