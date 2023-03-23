@@ -1,6 +1,6 @@
 ---
-title: Hack the Box Cyber Apocalypse 2023 
-date: 2023-03-23 18:44:00 -500
+title: Hack the Box Cyber Apocalypse CTF 2023
+date: 2023-03-23 
 categories: [ctf, writeup, htb, jeopardy]
 tags: [forensics, hardware, misc, pwn, web, warmup, python, curl]
 ---
