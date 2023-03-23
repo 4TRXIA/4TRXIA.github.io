@@ -28,8 +28,6 @@ HTB{l3t_th3_tr3asur3_hunt1ng_b3g1n!}
 ## trapped source (web)
 --------------------
 
-![trapped-source-1](https://raw.githubusercontent.com/4TRXIA/HTB-CA-CTF-2023-Writeup-Images/main/trapped_source_site.png)
-
 This was a pretty straightforward and hese were the steps I took for this challenge:
 
 - Viewed the page source (Ctrl + U or Right-Click + View Page Source)
