@@ -12,10 +12,6 @@ Cyber Apocalypse 2023 was a jeopardy style CTF spanning multiple categories such
 This is my first CTF that I have entered though I continue to complete rooms on TryHackMe, using the HTB Academy and working through the PicoCTF Gym.
 I've come to understand during this short experience - there's nothing quite like a live CTF. I hope to continue doing CTFs in future, at least, as much as time allows.
 
-(Will be adding more over time).
-- **Posts Added:** trapped source, persistence, plaintext tleasure, alien cradle, extraterrestrial persistence, initialise connection, questionnaire, getting started, timed transmission
-- **Posts to follow:** critical flight, debut
-
 
 ## Warmup
 
@@ -513,6 +509,7 @@ HTB{b0f_s33m5_3z_r1ght?}
 
 
 ## Timed Transmission (Hardware) [Very Easy]
+-------
 
 We are provided with a zipped file and upon extracting it, find a file called "Captured_Signals.sal".
 
@@ -556,6 +553,109 @@ HTB{b391N_tH3_HArdWAr3_QU3St}
 
 
 ## Critical Flight (Hardware) [Very Easy]
+--------
+
+This challenge also has a downloadable archive and extracting it reveals 13 files in a .gbr format.
+Researching the file type shows that it is used in circuitboard design, the standard even.
+
+The *file*  command shows that a lot of ASCII text is available, so a quick string check is done, to no result.
+
+Let's see what other information we can get from the files:
+
+``` bash
+$ xxd HadesMicro-B_Cu.gbr  
+
+00000000: 4730 3420 2340 2120 5446 2e47 656e 6572  G04 #@! TF.Gener
+00000010: 6174 696f 6e53 6f66 7477 6172 652c 4b69  ationSoftware,Ki
+00000020: 4361 642c 5063 626e 6577 2c28 362e 302e  Cad,Pcbnew,(6.0.
+```
+
+The research has paid off, let's get the KiCad software:
+
+``` bash
+$ sudo add-apt-repository ppa:kicad/kicad-7.0-releases
+$ sudo apt install kicad
+```
+
+Upon installing KiCad, we are able to open the files and view the PCB designs in Gerber Viewer, being treated by the sight of the flag from the following two files:
+
+``` text
+HadesNicro-B_Cu.gbr
+HadesMicro-In1_Cu.gbr
+```
+
+When pieced together, we get the flag:
+
+``` text
+HTB{533_7h3_1nn32_w02k1n95_0f_313c720n1c5#}
+```
+
+
+## Debug (Hardware) [Easy]
+-----
+
+This challenge also has a downloadable archive and extracting it reveals the .sal format again. Despite knowing the format, a quick scan with *file*  and  *strings* reveals no sneaky flag, so we opt to open the file in Logic 2.
+
+A bit of reading up, helped to understand that there were specific baud rates which tended to be common, it was a matter of finding out which. As for the type, async serial seemed most appropriate.
+
+Cycling through the various suggested baud rates:
+
+``` text
+Async Serial, RX as input and baud rate of 115200 bps
+```
+
+
+We eventually settle on the winning one displayed in the terminal:
+
+``` text
+WARNING: The deep space observatory is offline HTB{
+INFO: Communication systems are offline reference code: 547311173_
+WARNING: Unauthorized subroutines detected! reference code: n37w02k_
+WARNING: The satellite dish can not sync with the swarm. reference code: c0mp20m153d}
+
+             ______
+          ,'"       "-._
+        ,'              "-._ _._
+        ;              __,-'/   |
+       ;|           ,-' _,'"'._,.
+       |:            _,'      |\ `.
+       : \       _,-'         | \  `.
+        \ \   ,-'             |  \   \
+         \ '.         .-.     |       \
+          \  \         "      |        :
+           `. `.              |        |
+             `. "-._          |        ;
+             / |`._ `-._      L       /
+            /  | \ `._   "-.___    _,'
+           /   |  \_.-"-.___   """"
+           \   :            /"""
+            `._\_       __.'_
+       __,--''_ ' "--'''' \_  `-._
+ __,--'     .' /_  |   __. `-._   `-._
+<            `.  `-.-''  __,-'     _,-'
+ `.            `.   _,-'"      _,-'
+   `.            ''"       _,-'
+     `.                _,-'
+       `.          _,-'
+         `.   __,'"
+           `'"
+
+Starting kernel ...
+
+Development login enabled: no
+Debugging mode enabled: yes
+Safe mode enabled: no
+
+SATDish - Managment User Terminal.
+Dish is offline
+admin login:
+```
+
+Piecing the flag together:
+
+``` text
+HTB{547311173_n37w02k_c0mp20m153d}
+```
 
 
 
