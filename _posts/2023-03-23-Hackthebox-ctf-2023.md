@@ -13,7 +13,7 @@ This is my first CTF that I have entered though I continue to complete rooms on 
 I've come to understand during this short experience - there's nothing quite like a live CTF. I hope to continue doing CTFs in future, at least, as much as time allows.
 
 (Will be adding more over time).
-- **Posts Added:** trapped source, persistence, plaintext tleasure, alien cradle, extraterrestrial persistence
+- **Posts Added:** trapped source, persistence, plaintext tleasure, alien cradle, extraterrestrial persistence, initialise connection
 - **Posts to follow:** getting started, initialise connection, questionnaire, critical flight, debut, and timed transmission
 
 
@@ -27,7 +27,7 @@ This was a fun little flag to be had after joining the Hack the Box discord. It 
 HTB{l3t_th3_tr3asur3_hunt1ng_b3g1n!}
 ```
 
-## Trapped Source (web)
+## Trapped Source (Web) [Very Easy]
 --------------------
 
 This was a pretty straightforward and these were the steps I took for this challenge:
@@ -44,7 +44,7 @@ HTB{V13w_50urc3_c4n_b3_u53ful!!!}
 ```
 
 
-## Persistence (misc)
+## Persistence (Misc) [Very Easy]
 -------------------
 
 First, I'll say, what a fitting name for this challenge 🤣
@@ -83,7 +83,7 @@ Getting the following output:
 HTB{y0u_h4v3_p0w3rfuL_sCr1pt1ng_ab1lit13S!}
 ```
 
-## Plaintext Tleasure (forensics)
+## Plaintext Tleasure (Forensics) [Very Easy]
 ------------------------------------------------------
 
 This challenge had to be downloaded and contained a zip file, which can easily opened with the following command:
@@ -105,7 +105,7 @@ We get the flag:
 HTB{th3s3_4l13ns_st1ll_us3_HTTP}
 ```
 
-## Alien Cradle (forensics)
+## Alien Cradle (Forensics) [Very Easy]
 ----------------------------------------------------------
 
 We are provided with a zipped folder containing a Powershell script. I confirm the contents:
@@ -132,7 +132,8 @@ There probably is a more efficient way to extract the flag from this text, but f
 HTB{p0w3rsh3ll_Cr4dl3s_c4n_g3t_th3_j0b_d0n3}
 ```
 
-## Extraterrestrial Persistence (forensics)
+## Extraterrestrial Persistence (Forensics) [Very Easy]
+-------------------------------------
 
 This challenge was provided as a downloadable zip file, which upon extraction reveals a shell script file. I confirm this as usual:
 
@@ -192,5 +193,31 @@ Flag:
 ``` text
 HTB{th3s3_4l13nS_4r3_s00000_b4s1c}
 ```
+
+## Initialise Connection (Pwn) [Very Easy]
+-----------------------------
+
+We are informed to connect to the challenge with netcat in the following manner:
+
+``` bash
+$ nc ip-address port
+
+▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣
+▣                            
+▣  Enter 1 to get the flag!  
+▣                            
+▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣
+
+```
+Then send the number 1 in order to get the flag. 
+
+``` bash
+>> 1
+HTB{g3t_r34dy_f0r_s0m3_pwn}
+```
+
+A very easy challenge which also teaches a bit on using nc.
+
+
 
 
