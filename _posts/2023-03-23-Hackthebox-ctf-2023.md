@@ -13,8 +13,8 @@ This is my first CTF that I have entered though I continue to complete rooms on 
 I've come to understand during this short experience - there's nothing quite like a live CTF. I hope to continue doing CTFs in future, at least, as much as time allows.
 
 (Will be adding more over time).
-- **Posts Added:** trapped source, persistence, plaintext tleasure, alien cradle, extraterrestrial persistence, initialise connection, questionnaire, getting started
-- **Posts to follow:** critical flight, debut, and timed transmission
+- **Posts Added:** trapped source, persistence, plaintext tleasure, alien cradle, extraterrestrial persistence, initialise connection, questionnaire, getting started, timed transmission
+- **Posts to follow:** critical flight, debut
 
 
 ## Warmup
@@ -375,6 +375,14 @@ We finally get the flag!
 HTB{th30ry_bef0r3_4cti0n}
 ```
 
+It should be noted that the information provided in the questionnaire could also be found with the following command in order to answer the questions:
+
+``` bash
+$ file test
+
+test: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=5a83587fbda6ad7b1aeee2d59f027a882bf2a429, for GNU/Linux 3.2.0, not stripped
+```
+
 
 ## Getting Started (pwn) [Very Easy]
 -------------------------
@@ -502,3 +510,52 @@ We get the flag:
 ``` text
 HTB{b0f_s33m5_3z_r1ght?}
 ```
+
+
+## Timed Transmission (Hardware) [Very Easy]
+
+We are provided with a zipped file and upon extracting it, find a file called "Captured_Signals.sal".
+
+Briefly, looking up ".sal" gives a hint of the possible software, but let's be more certain.
+
+``` bash
+$ file Captured_Signals.sal
+
+Captured_Signals.sal: Zip archive data, at least v2.0 to extract, compression method=deflate
+```
+
+Extracting the file gives five .bin files and one .json file. The .sal file, bin files and json file get the cursory strings check, revealing nothing.
+To confirm the software used for the .sal file, run:
+
+``` bash
+$ xxd data-0.bin
+
+00000000: 3c53 414c 4541 453e 0100 0000 6400 0000  <SALEAE>....d...
+```
+
+Between the .sal file type, SALAE in the programme header and our previous search results - there is no doubt that this is a file for Salae's Logic 2 programme.
+
+Proceed to download the version for your OS. On Linux we get an ".AppImage" file, which can be run like this:
+(We are making it executable)
+
+``` bash
+chmod +x filename.AppImage
+```
+
+Which can then be run with:
+
+``` bash
+./filename
+```
+
+The flag in this challenge was interesting, because much like the warmup, it was hiding in plain sight. Depening on zoom magnigication, it could be missed, but finding the correct amount reveals the flag composed by the signal output itself:
+
+``` text
+HTB{b391N_tH3_HArdWAr3_QU3St}
+```
+
+
+## Critical Flight (Hardware) [Very Easy]
+
+
+
