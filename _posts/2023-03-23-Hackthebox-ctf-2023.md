@@ -13,8 +13,8 @@ This is my first CTF that I have entered though I continue to complete rooms on 
 I've come to understand during this short experience - there's nothing quite like a live CTF. I hope to continue doing CTFs in future, at least, as much as time allows.
 
 (Will be adding more over time).
-- **Posts Added:** trapped source, persistence, plaintext tleasure, alien cradle, extraterrestrial persistence, initialise connection
-- **Posts to follow:** getting started, initialise connection, questionnaire, critical flight, debut, and timed transmission
+- **Posts Added:** trapped source, persistence, plaintext tleasure, alien cradle, extraterrestrial persistence, initialise connection, questionnaire
+- **Posts to follow:** getting started, initialise connection, critical flight, debut, and timed transmission
 
 
 ## Warmup
@@ -218,6 +218,164 @@ HTB{g3t_r34dy_f0r_s0m3_pwn}
 
 A very easy challenge which also teaches a bit on using nc.
 
+## Questionnaire (Pwn) [Very Easy]
+--------------------------------
+
+As the previous challenge has taught, this is provided as a Docker instance which we connect to like so:
+
+``` bash
+nc ip-address port
+```
+
+Which provides an interesting questionnaire, educating about c/c++/ELF files in Linux. A downloadable zip archive is provided to help find the flag we well. 
+
+Most of the answers can be found by reading the text provided, but those which require extras steps will be detailed accordingly.
+
+``` text
+[*] Question number 0x1:                                                                     
+                                                                                             
+Is this a '32-bit' or '64-bit' ELF? (e.g. 1337-bit)                                          
+                                                                                             
+>>  64-bit
 
 
+[*] Question number 0x2:                                                                     
+                                                                                             
+What's the linking of the binary? (e.g. static, dynamic)                                     
+                                                                                             
+>>  dynamic
+
+
+[*] Question number 0x3:                                                                     
+                                                                                             
+Is the binary 'stripped' or 'not stripped'?                                                  
+                                                                                             
+>>  not stripped
+
+
+[*] Question number 0x4:                                                                     
+                                                                                             
+Which protections are enabled (Canary, NX, PIE, Fortify)?                                    
+                                                                                             
+>>  NX
+
+
+[*] Question number 0x5:                                                                     
+                                                                                             
+What is the name of the custom function that gets called inside `main()`? (e.g. vulnerable_function())                                                                                    
+                                                                                             
+>>  vuln()
+
+
+0x6:                                                                     
+                                                                                             
+What is the size of the 'buffer' (in hex or decimal)?                                        
+                                                                                             
+>> 
+```
+
+
+For this question, we'll have to examine the provided file, "test.c". We output the code:
+
+
+``` bash
+$ cat test.c
+
+#include <stdio.h>
+#include <stdlib.h>
+
+/*
+This is not the challenge, just a template to answer the questions.
+To get the flag, answer the questions. 
+There is no bug in the questionnaire.
+*/
+
+void gg(){
+        system("cat flag.txt");
+}
+
+void vuln(){
+        char buffer[0x20] = {0};
+        fprintf(stdout, "\nEnter payload here: ");
+        fgets(buffer, 0x100, stdin);
+}
+
+void main(){
+        vuln();
+}
+```
+
+We see the line denoting the size of the buffer and add it to the questionnaire accodingly:
+
+``` bash
+[*] Question number 0x6:                                                                     
+                                                                                             
+What is the size of the 'buffer' (in hex or decimal)?                                        
+                                                                                             
+>> 0x20
+```
+
+We revert back the the questionnaire text in the terminal for the following questions:
+
+``` text
+[*] Question number 0x7:                                                                     
+                                                                                             
+Which custom function is never called? (e.g. vuln())                                         
+                                                                                             
+>>   gg()
+
+
+[*] Question number 0x8:                                                                     
+                                                                                             
+What is the name of the standard function that could trigger a Buffer Overflow? (e.g. fprintf())                                                                                          
+                                                                                             
+>>  fgets
+
+```
+
+The next question needs us to run the provided program, which can be done with the following command:
+
+``` bash
+./test 
+```
+
+Following the steps accoding the question, we get:
+
+``` text
+[*] Question number 0x9:                                                                     
+                                                                                             
+Insert 30, then 39, then 40 'A's in the program and see the output.                          
+                                                                                             
+After how many bytes a Segmentation Fault occurs (in hex or decimal)?                        
+                                                                                             
+>>   40
+```
+
+The final question is not provided within the questionnaire text, or via the "test.c" program itself. Instead the use of a very useful command:
+
+``` bash
+readelf -a test
+```
+
+Readelf is a command which provides more information on ELF files, the -a tack is all results and finally, we have to add our file name.
+
+Final answer for the questionnaire:
+
+``` text
+[*] Question number 0xa:                                                                     
+                                                                                             
+What is the address of 'gg()' in hex? (e.g. 0x401337)                                        
+                                                                                             
+>> 0x401176 
+```
+
+We finally get the flag!
+
+``` text
+HTB{th30ry_bef0r3_4cti0n}
+```
+
+
+## Getting Started (pwn) [Very Easy]
+-------------------------
 
