@@ -7,12 +7,14 @@ tags: [forensics, hardware, misc, pwn, web, warmup, python, curl]
 
 # Hack the Box Cyber Apocalypse 2023 Complete! (≧∇≦)ﾉ
 
-Cyber Apocalypse 2023 was a jeopardy style CTF spanning multiple categories such as: forensics, hardware, pwn, misc, web, machine learning, cryptography.
+Cyber Apocalypse 2023 was a jeopardy style CTF spanning multiple categories such as: forensics, hardware, pwn, misc, web, machine learning, blockchain and cryptography.
 
-This is my first CTF that I have entered though I continue to rooms on TryHackMe, using the HTB Academy and working through the PicoCTF Gym.
+This is my first CTF that I have entered though I continue to complete rooms on TryHackMe, using the HTB Academy and working through the PicoCTF Gym.
 I've come to understand during this short experience - there's nothing quite like a live CTF. I hope to continue doing CTFs in future, at least, as much as time allows.
 
-(Will be adding more posts and formatting as needed)
+(Will be adding more over time).
+- **Posts Added:** trapped source, persistence
+- Posts to follow: getting started, initialise connection, questionnaire, critical flight, debut, timed transmission, alien cradle, plaintext tleasure and extraterrestrial persistence
 
 
 ## Warmup
@@ -28,7 +30,7 @@ HTB{l3t_th3_tr3asur3_hunt1ng_b3g1n!}
 ## Trapped Source (web)
 --------------------
 
-This was a pretty straightforward and hese were the steps I took for this challenge:
+This was a pretty straightforward and these were the steps I took for this challenge:
 
 - Viewed the page source (Ctrl + U or Right-Click + View Page Source)
 - Scanned the page for any mention of the HTB flag format HTB{...}
@@ -49,9 +51,9 @@ First, I'll say, what a fitting name for this challenge 🤣
 
 At the moment I don't know much about web-based challenges and incorrectly approached this at first. I read the question carefully and soon realised that the page needed to be accessed many, *MANY*  times (around 1000 as per the description).
 
-There may be many ways to approach this, but I used what I knew, which was the handy tool called **Curl**.
+There may be many ways to approach this, but I used what I knew, which was the handy tool called **cURL**.
 
-At first, I tried to simply use the given url with cURL, like so:
+At first, I tried to simply use the given url with curl, like so:
 
 ``` bash
 curl ip-address:port/flag
@@ -70,7 +72,13 @@ while true; do curl --output >(cat >> filename) ip-address:port/flag; done
 ```
 
 And after some long time later, a flag appears!
+We can view it like so, piping it to grep:
 
+``` bash
+cat filename | grep "HTB{"
+```
+
+Getting the following output:
 ``` text
 HTB{y0u_h4v3_p0w3rfuL_sCr1pt1ng_ab1lit13S!}
 ```
