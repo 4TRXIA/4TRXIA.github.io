@@ -13,8 +13,8 @@ This is my first CTF that I have entered though I continue to complete rooms on 
 I've come to understand during this short experience - there's nothing quite like a live CTF. I hope to continue doing CTFs in future, at least, as much as time allows.
 
 (Will be adding more over time).
-- **Posts Added:** trapped source, persistence
-- Posts to follow: getting started, initialise connection, questionnaire, critical flight, debut, timed transmission, alien cradle, plaintext tleasure and extraterrestrial persistence
+- **Posts Added:** trapped source, persistence, plaintext tleasure
+- **Posts to follow:** getting started, initialise connection, questionnaire, critical flight, debut, timed transmission, alien cradle and extraterrestrial persistence
 
 
 ## Warmup
@@ -82,3 +82,20 @@ Getting the following output:
 ``` text
 HTB{y0u_h4v3_p0w3rfuL_sCr1pt1ng_ab1lit13S!}
 ```
+
+## Plaintext Tleasure (forensics)
+------------------------------------------------------
+
+This challenge had to be downloaded and contained a zip file, which can easily opened with the following command:
+
+``` bash
+unzip filename.zip
+```
+
+The extract file is named "capture.pcap". which I confirm with the *file* command.
+Before searching through the file in its entirety, I decide to try basic commands and see if the flag can be found this way and this is the line which worked:
+
+``` bash
+strings capture.pcap | grep "HTB{"
+```
+
