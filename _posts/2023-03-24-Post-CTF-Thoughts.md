@@ -18,7 +18,7 @@ The challenges ranged from very easy to insane and I managed to complete the ver
 Apart from lacking in knowledge or experience in certain topics, I've considered the following skills necessary as I completed the challenges.
 
 - ### Automation
-This was most evident where gross repetition was required. I managed to use the cURL I knew or expand upon my existing knowledge with some research, but for other challenges which required some form of automation, I needed more time to produce the desired output. Time isn't always a luxury afforded during a live CTF or an attack druing a real world setting, so I plan to remedy this by improving my Python knowledge to assist my tasks.
+This was most evident where gross repetition was required. I managed to use the cURL I knew or expand upon my existing knowledge with some research, but for other challenges which required some form of automation, I needed more time to produce the desired output. Time isn't always a luxury afforded during a live CTF or an attack during a real world setting, so I plan to remedy this by improving my Python knowledge to assist my tasks.
 
 - ### Tools
 It is somewhat related to automation, but more generally to my methodology as well. I would like to improve both my knowledge and working experience of various tools. Unlike automation, this isn't something which requires intense study, as working with the tools regularly will foster understanding.
